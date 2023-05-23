@@ -1,25 +1,16 @@
-from index import *
-import pandas as pd
-bucket_name = 'jigsawtexasquery'
+from query_bucket.athena_boto import *
 
-bucket = s3.create_bucket(Bucket = bucket_name)
+def query_results(query):
+    output_bucket_name = "jigsawtexasresults" # change to your output bucket
+    db_name = "txreceipts" # change to your db
+    output_folder = "output" 
+    
+    output_bucket_folder = f"s3://{output_bucket_name}/{output_folder}/"
+    query_response = query_athena(query,
+                               db_name, output_bucket_folder)
+    
+    results_df = get_query_results(output_bucket_name, output_folder, query_response)
+    return results_df
 
-
-# pull data and 
-# coerce to line separate list of dictionaries
-name = 'HONDURAS MAYA CAFE & BAR LLC'
-receipts = find_receipts(name)
-receipts_df = pd.DataFrame(receipts)
-file_name = f'{cleaned_name(name)}.csv'
-receipts_df.to_csv(file_name, index = False)
-
-df = pd.read_csv(file_name)
-
-# s3.upload_file(file_name, bucket_name, file_name)
-
-# obj = s3.get_object(Bucket=bucket_name, Key=file_name)
-# text = obj['Body'].read()
-
-# bucket_name = 'jigsawtexasresults'
-
-# results_bucket = s3.create_bucket(Bucket = bucket_name)
+# change jigsawtexasquery to your input bucket
+# query_results("SELECT * FROM jigsawtexasquery limit 3")
