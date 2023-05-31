@@ -1,5 +1,5 @@
-from extract_load.request_and_upload import *
-from transform.athena_boto import *
+from request_and_upload import *
+
 import pandas as pd
 
 query_bucket_name = 'jigsawtexasquery'

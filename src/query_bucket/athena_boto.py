@@ -1,6 +1,4 @@
-import logging.config
 import time
-from typing import Dict
 
 import boto3
 import pandas as pd
